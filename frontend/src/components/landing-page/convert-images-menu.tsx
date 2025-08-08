@@ -18,17 +18,9 @@ import {
 import { Button } from "../ui/button";
 import { Dropzone, DropzoneEmptyState } from "@/components/ui/dropzone";
 import { ChevronDownIcon, Trash2Icon } from "lucide-react";
+import { convertImages } from "@/lib/fetches";
 
-const IMAGE_FORMATS = [
-  "png",
-  "jpeg",
-  "webp",
-  "avif",
-  "bmp",
-  "tiff",
-  "gif",
-  "ico",
-] as const;
+const IMAGE_FORMATS = ["png", "jpeg", "webp", "avif", "tiff", "gif"] as const;
 
 type ImageItem = {
   id: string;
@@ -59,8 +51,19 @@ export function ConvertImagesMenu() {
     setFiles(files.filter((_, i) => i !== idx));
   };
 
-  const handleConvertImages = () => {
-    console.log(files);
+  const handleConvertImages = async () => {
+    const { files: converted } = await convertImages(files, targetFormat);
+    converted.forEach((f, index) => {
+      const link = document.createElement("a");
+      link.href = f.dataUrl;
+      link.download = f.name;
+      document.body.appendChild(link);
+      // Stagger a bit to avoid some browsers blocking multiple downloads
+      setTimeout(() => {
+        link.click();
+        link.remove();
+      }, index * 50);
+    });
   };
 
   return (
