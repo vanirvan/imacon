@@ -4,17 +4,12 @@ import {
   DropzoneContent,
   DropzoneEmptyState,
 } from "@/components/ui/dropzone";
-import { Button } from "../ui/button";
 
 export function Hero() {
   const { files, setFiles } = storeUploadedFilesStore();
 
   const handleDrop = (files: File[]) => {
     setFiles(files);
-  };
-
-  const handleConvert = () => {
-    console.log(files);
   };
 
   return (
@@ -42,9 +37,6 @@ export function Hero() {
             <DropzoneContent />
           </Dropzone>
         </div>
-        <Button size="lg" className="cursor-pointer" onClick={handleConvert}>
-          Convert
-        </Button>
       </div>
     </section>
   );
