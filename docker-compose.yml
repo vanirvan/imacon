@@ -1,11 +1,23 @@
 version: "3.9"
 
 services:
-  imacon:
+  backend:
     build:
       context: .
       dockerfile: backend/Dockerfile
-    container_name: imacon
+    container_name: imacon-backend
     ports:
-      - "3001:3000"
+      - "3101:3000"
     restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        VITE_API_URL: "http://localhost:3101"
+    container_name: imacon-frontend
+    ports:
+      - "3100:5173"
+    depends_on:
+      - backend
